@@ -7,7 +7,7 @@ Created on Sat Nov 10 23:14:52 2012
          
 """
 
-from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent
+from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent, GetDateTime
 from PyIDSBenchGlobals import *
 import sys
 import getopt
@@ -29,44 +29,51 @@ def main(argv):
                                                           "pcap_file=", "unittests", "ids_check"])
     except getopt.GetoptError:
         sys.exit(2)
-        
-    for option, argument in opts:
+       
+    if opts == True:
 
-        if option in ("-h", "-?", "--help"): 
-            ScriptUsage()              
-            sys.exit()
-
-        elif option in ("-d", "--directory"):
-            directory = argument
-            DEFAULT_SAVE_DIRECTORY = directory
-            print directory
-        
-        elif option in ("-t", "--ids_type"):
-            ids_type = argument
-            DEFAULT_IDS_TYPE = ids_type
-            print ids_type
-        
-        elif option in ("-n", "--number_of_runs"):
-            number_of_runs = argument
-            DEFAULT_NUMBER_OF_RUNS = number_of_runs
-            print number_of_runs
+        for option, argument in opts:
+    
+            if option in ("-h", "-?", "--help"): 
+                ScriptUsage()              
+                sys.exit()
+    
+            elif option in ("-d", "--directory"):
+                directory = argument
+                DEFAULT_SAVE_DIRECTORY = directory
+                print directory
             
-        elif option == "-a":
-            print "run all tests"
-        
-        elif option in ("-p", "--pcap_file"):
-            pcap_file = argument
-            DEFAULT_PCAP_FILE = pcap_file
-            print pcap_file
+            elif option in ("-t", "--ids_type"):
+                ids_type = argument
+                DEFAULT_IDS_TYPE = ids_type
+                print ids_type
             
-        elif option == "-v":
-            PrintVersion()
-        
-        elif option in ("-u", "--unittests"):
-            print "unit tests"
-        
-        elif option in ("-i", "--ids_check"):
-            WhatIDSArePresent()
+            elif option in ("-n", "--number_of_runs"):
+                number_of_runs = argument
+                DEFAULT_NUMBER_OF_RUNS = number_of_runs
+                print number_of_runs
+                
+            elif option == "-a":
+                print "run all tests"
+            
+            elif option in ("-p", "--pcap_file"):
+                pcap_file = argument
+                DEFAULT_PCAP_FILE = pcap_file
+                print pcap_file
+                
+            elif option == "-v":
+                PrintVersion()
+            
+            elif option in ("-u", "--unittests"):
+                print "unit tests"
+            
+            elif option in ("-i", "--ids_check"):
+                WhatIDSArePresent()
+    
+    else:
+        InfoTimeNow, WarningTimeNow, ErrorTimeNow = GetDateTime()
+        print ErrorTimeNow, "You did not specify any command line options:"
+        ScriptUsage()
     
 if __name__ == "__main__":
     main(sys.argv[1:])

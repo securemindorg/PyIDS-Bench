@@ -28,7 +28,6 @@ def ScriptUsage():
 
     ''' This function defines the help statements '''
 
-    print
 
     InfoTimeNow, WarningTimeNow, ErrorTimeNow = GetDateTime()
     NumCPUsAvailable = multiprocessing.cpu_count()    
