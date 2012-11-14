@@ -33,3 +33,7 @@ SNORT_DEFUALT_VRT_FREE_RULESET_CONFIG = " "
 SNORT_OPTOMIZED_NO_RULES_DEFAULT_CONFIG = " "
 SNORT_OPTOMIZED_OPEN_ET_RULESET_CONFIG = " "
 SNORT_OPTOMIZED_VRT_FREE_RULESET_CONFIG = " "
+
+# The globals below are not to be modified, they are simply default values that are being initialized
+
+ProcessName = " "

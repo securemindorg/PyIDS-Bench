@@ -1,2 +1,35 @@
-Info Page:
+About
+=====
+PyIDS-Bench (The Python Intrusion Detection Benchmarking Tool)
+is a utility to test the performance and detection capabilities
+of various IDS' and compare them to one-and-other on specific 
+types of hardware. 
 
+PyIDS-Bench is free to use and licensed under the XXXX. A copy of this
+license is available at: http://xxxxxxxxxxxx
+
+Up to date versions of this utility are maintained by XXXXXX and 
+can be found at XXXXXXX 
+
+Build Requirements
+==================
+python
+python-dev
+
+Library Requirements
+====================
+All libraries can be installed through pip or easy_install
+
+netifaces
+multiprocessing
+os
+datetime
+
+Installation Process
+====================
+
+Installation is straight forward. 
+
+git clone https://github.com/securemindorg/PyIDS-Bench.git
+cd PyIDS-Bench
+python setup.py install
