@@ -36,4 +36,8 @@ SNORT_OPTOMIZED_VRT_FREE_RULESET_CONFIG = " "
 
 # The globals below are not to be modified, they are simply default values that are being initialized
 
-ProcessName = " "
+ProcessName = "suricata"
+mem_output_image_name='./graphing_tests/mem.png'                      # set the name of the output image
+cpu_output_image_name='./graphing_tests/cpu.png'
+sys_stat_input_filename="./graphing_tests/sysstats_counter.log"
+sys_stat_output_tmp_filename="/tmp/sysstats_counter.log_noneg.tmp"

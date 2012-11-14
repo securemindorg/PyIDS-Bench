@@ -7,7 +7,7 @@ Created on Sat Nov 10 23:14:52 2012
          
 """
 
-from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent, GetDateTime
+from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent, GetDateTime, CreateGraphs
 from PyIDSBenchGlobals import *
 import sys
 import getopt
@@ -24,13 +24,13 @@ def main(argv):
     ''' This is the main function '''
         
     try:
-        opts, args = getopt.getopt(argv, "h?d:t:n:ap:vui", ["help", "directory=", 
+        opts, args = getopt.getopt(argv, "h?d:t:n:ap:vuig", ["help", "directory=", 
                                                           "ids_type=", "number_of_runs=", 
                                                           "pcap_file=", "unittests", "ids_check"])
     except getopt.GetoptError:
         sys.exit(2)
        
-    if opts == True:
+    if opts > 0:
 
         for option, argument in opts:
     
@@ -69,11 +69,17 @@ def main(argv):
             
             elif option in ("-i", "--ids_check"):
                 WhatIDSArePresent()
+            
+            elif option in ("-g"):
+                ''' this is like an easteregg for just dev use, the goal is to have something 
+                to test graphing with without having to gather data every time, this option will
+                be removed before final release and as such is not listed in the help screen '''
+                CreateGraphs()
     
-    else:
-        InfoTimeNow, WarningTimeNow, ErrorTimeNow = GetDateTime()
-        print ErrorTimeNow, "You did not specify any command line options:"
-        ScriptUsage()
+#    else:
+#        InfoTimeNow, WarningTimeNow, ErrorTimeNow = GetDateTime()
+#        print ErrorTimeNow, "You did not specify any command line options:"
+#        ScriptUsage()
     
 if __name__ == "__main__":
     main(sys.argv[1:])

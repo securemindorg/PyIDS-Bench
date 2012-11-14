@@ -14,6 +14,14 @@ import os
 import netifaces
 import psutil
 import time
+import subprocess
+import matplotlib
+matplotlib.use('Agg')                                           # Sets matplotlib up to not require X11
+from matplotlib.mlab import csv2rec                             # easier csv reading
+import matplotlib.pyplot as plt                                 # easier calling of matplotlib.pyplot
+import matplotlib.dates as mdates                               # neat function for working with date formats
+from pylab import *                                             # used for formatting the graphs
+
 
 
 def GetDateTime():
@@ -193,7 +201,70 @@ def CreateGraphs():
     
     ''' This function creates graphs as png images and returns an update value'''
     
-    return GraphUpdate
+    input = open(sys_stat_input_filename, 'r')
+    output = open(sys_stat_output_tmp_filename, 'w')                                                                                                                            
+                                                                                                                                                                           
+    filtered = (line for line in input if not line.startswith('-'))
+    
+    for line in filtered:                                                                                                                                                   
+        filtered2 = (line for line in input if not line.startswith('0'))
+        for line in filtered2:
+            output.write(line) 
+     
+    input.close()
+    output.close()
+    
+    data = csv2rec(sys_stat_output_tmp_filename, names=['rss', 'cpupercent', 'time'])
+    
+    rcParams['figure.figsize'] = 20, 5                              # this sets the dimensions of the graph to be made
+    rcParams['font.size'] = 8                                       # sets the font sizes on the graph
+    
+    fig = plt.figure()                                              # This is the actual plot function
+    
+    plt.plot(data['time'], data['rss'])                             # this sets the fields to be graphed
+    
+    ax = fig.add_subplot(111)                                       # this sets up the subplots which is basically the layering for axis's
+    ax.plot(data['time'], data['rss'])                              # set the fields for the x,y axis labeling
+    minutes = mdates.MinuteLocator()                                # find the hour marks out of the data and label them on the plot 
+    fmt = mdates.DateFormatter('%D - %H:%M')                        # setup the format for the labeling of the dates/times
+    ax.xaxis.set_major_locator(minutes)                             # set the major intervals for ticks on the graph
+    ax.xaxis.set_major_formatter(fmt)                               # apply the date/time format
+    
+    ax.grid()                                                       # turn on the plot grids
+    
+    plt.ylabel("Average KB/Sec Memory Usage")                       # this sets the y label
+    PlotTitle = ProcessName + " Process Memory Usage (Total RSS)"
+    plt.title(PlotTitle)                                            # this sets the title
+    
+    fig.autofmt_xdate(bottom=0.2, rotation=90, ha='left')           # rotate the x axis labels
+    
+    plt.savefig(mem_output_image_name)
+    
+    fig2 = plt.figure()                                             # This is the actual plot function
+    
+    plt.plot(data['time'], data['cpupercent'])                      # this sets the fields to be graphed
+    
+    ax2 = fig.add_subplot(111)
+    ax2.plot(data['time'], data['cpupercent'])
+    minutes = mdates.MinuteLocator()                                # find the hour marks out of the data and label them on the plot
+    fmt = mdates.DateFormatter('%D - %H:%M')                        # setup the format for the labeling of the dates/times
+    ax2.xaxis.set_major_locator(minutes)                            # set the major intervals for ticks on the graph
+    ax2.xaxis.set_major_formatter(fmt)                              # apply the date/time format
+    
+    ax2.grid()
+    
+    plt.ylabel("Average CPU Usage (Total Per All Cores)")           # this sets the y label
+    PlotTitle = ProcessName + " Process CPU Usage"
+    plt.title(PlotTitle)                                            # this sets the title
+    
+    fig2.autofmt_xdate(bottom=0.2, rotation=90, ha='left')          # rotate the x axis labels
+    
+    plt.savefig(cpu_output_image_name)
+    
+    os.remove(sys_stat_output_tmp_filename)                         # This removes the tempfile
+    
+    
+    return 
     
 def CreateHTMLPage():
     
