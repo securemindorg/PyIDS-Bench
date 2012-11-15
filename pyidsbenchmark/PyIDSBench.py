@@ -7,11 +7,10 @@ Created on Sat Nov 10 23:14:52 2012
          
 """
 
-from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent, GetDateTime, CreateGraphs
+from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent, GetDateTime, CreateGraphs, ProcessMonitor, Hello
 from PyIDSBenchGlobals import *
 import sys
 import getopt
-
 
 # This specifys the default options in the even that they aren't given by user
 directory = DEFAULT_SAVE_DIRECTORY
@@ -24,7 +23,7 @@ def main(argv):
     ''' This is the main function '''
         
     try:
-        opts, args = getopt.getopt(argv, "h?d:t:n:ap:vuig", ["help", "directory=", 
+        opts, args = getopt.getopt(argv, "h?d:t:n:ap:vuigP", ["help", "directory=", 
                                                           "ids_type=", "number_of_runs=", 
                                                           "pcap_file=", "unittests", "ids_check"])
     except getopt.GetoptError:
@@ -71,11 +70,15 @@ def main(argv):
                 WhatIDSArePresent()
             
             elif option in ("-g"):
-                ''' this is like an easteregg for just dev use, the goal is to have something 
+                ''' this is just for dev use, the goal is to have something 
                 to test graphing with without having to gather data every time, this option will
                 be removed before final release and as such is not listed in the help screen '''
                 CreateGraphs()
-    
+            elif option in ("-P"):
+                ''' this is again another test statement to make sure the process monitoring
+                function spawns a child process and works properly, it makes the assumption
+                that ProcessName is defined in the Globals file.'''
+                ProcessMonitor(ProcessName)
 #    else:
 #        InfoTimeNow, WarningTimeNow, ErrorTimeNow = GetDateTime()
 #        print ErrorTimeNow, "You did not specify any command line options:"

@@ -117,45 +117,52 @@ def WhatIDSArePresent():
     print
     
     return 
-
+    
+    
 def ProcessMonitor(ProcessName):
 
-    ''' This function defines the necessary steps to creating a cpu and memory process monitor '''
+    ''' This function defines the necessary steps to creating a cpu and memory process monitor. 
+    Contained within is the necessary code for writing a csv file with new rows every second. In
+    addition I'm using the multiprocessing library to spawn everything off. I am not using the
+    threading module because it does not take into account the multiple core availablbility of
+    most systems. In additon the threading library impliments time slicing which I have a 
+    feeling is going to cause a problem when it comes to acuratly monitoring over a large 
+    period of time'''
 
-    procname = ProcessName
+    def ActualProcessMonitor(ProcessName):
+        while True:
+                output_sys = open("/tmp/sysstats_counter.log", 'a')
+        
+                for proc in psutil.process_iter():
+                        if proc.name == ProcessName:
+                                p = proc
+        
+                p.cmdline
+        
+                proc_rss, proc_vms =  p.get_memory_info()
+                proc_cpu =  p.get_cpu_percent(1)
+        
+                scol1 = str(proc_rss / 1024)
+                scol2 = str(proc_cpu)
+        
+                now = str(datetime.datetime.now())
+        
+                output_sys.write(scol1)
+                output_sys.write(", ")
+                output_sys.write(scol2)
+                output_sys.write(", ")
+                output_sys.write(now)
+                output_sys.write("\n")
+        
+                output_sys.close( )
+        
+                time.sleep(1)
     
-    while True:
-            output_sys = open("/tmp/sysstats_counter.log", 'a')
-    
-            for proc in psutil.process_iter():
-                    if proc.name == procname:
-                            p = proc
-    
-            p.cmdline
-    
-            proc_rss, proc_vms =  p.get_memory_info()
-            proc_cpu =  p.get_cpu_percent(1)
-    
-            scol1 = str(proc_rss / 1024)
-            scol2 = str(proc_cpu)
-    
-            print scol1
-            print scol2
-    
-            now = str(datetime.datetime.now())
-    
-            output_sys.write(scol1)
-            output_sys.write(", ")
-            output_sys.write(scol2)
-            output_sys.write(", ")
-            output_sys.write(now)
-            output_sys.write("\n")
-    
-            output_sys.close( )
-    
-            time.sleep(1)
 
-    return
+    APM = multiprocessing.Process(target=ActualProcessMonitor, args=(ProcessName,))
+    APM.start()
+    
+
     
 def MinMaxMean():
     
