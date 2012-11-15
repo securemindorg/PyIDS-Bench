@@ -33,6 +33,20 @@ def GetDateTime():
     ErrorTimeNow = datetime.datetime.now().strftime('%m/%d/%G -- %T - <Error> -')
 
     return InfoTimeNow, WarningTimeNow, ErrorTimeNow
+    
+def SysLogging(logmessage):
+    
+    ''' This function is used to log status messages to syslog. For the moment 
+    I'm cheating and using Logger the bash utility. I realize this isn't the most
+    pythonic way of doing things, however logger is tried and true and something that
+    I know how to work with at the moment. Therefore I would rather just get a quick
+    solution in place and go from there '''
+    
+    BashLogger = "logger " + logmessage
+    
+    logprocess = subprocess.Popen(BashLogger.split(), stdout=subprocess.PIPE)
+    output = logprocess.communicate()[0]
+    
 
 def ScriptUsage():
 
@@ -96,6 +110,7 @@ def PrintVersion():
     return 
 
 def WhatIDSArePresent():
+    
     ''' This function checks to see what IDS systems are present 
         currently this includes Snort and Suricata '''
         
@@ -163,47 +178,6 @@ def ProcessMonitor(ProcessName):
     APM.start()
     
 
-    
-def MinMaxMean():
-    
-    ''' This function gets the min max and mean of a series of numbers '''
-    
-    return Min, Max, Mean
-    
-
-def StandardDeviation():
-    
-    ''' This function calculates the standard deviation of the multiple test runs '''
-    
-    return StandardDev
-    
-def RunAllTests():
-    
-    ''' This runs benchmarks on all IDS's currently supported '''
-    
-    SuricataTests()
-    SnortTests()
-    
-    return
-    
-def SuricataTests():
-    
-    ''' This runs only the suricata benchmarks '''
-    
-    return
-    
-def SnortTests():
-    
-    ''' This runs only the snort benchmarks '''
-    
-    return
-    
-def ProcessLogFiles():
-    
-    ''' This processes all the log files in preperation for reporting '''    
-    
-    return
-    
 def CreateGraphs():
     
     ''' This function creates graphs as png images and returns an update value'''
@@ -270,8 +244,49 @@ def CreateGraphs():
     
     os.remove(sys_stat_output_tmp_filename)                         # This removes the tempfile
     
+    ''' This still needs added content for graphing the packet performance related items '''
+
     
-    return 
+def MinMaxMean(ResultsArray):
+    
+    ''' This function gets the min max and mean of a series of numbers '''
+    
+    return Min, Max, Mean
+    
+
+def StandardDeviation():
+    
+    ''' This function calculates the standard deviation of the multiple test runs '''
+    
+    return StandardDev
+    
+def RunAllTests():
+    
+    ''' This runs benchmarks on all IDS's currently supported '''
+    
+    SuricataTests()
+    SnortTests()
+    
+    return
+    
+def SuricataTests():
+    
+    ''' This runs only the suricata benchmarks '''
+    
+    return
+    
+def SnortTests():
+    
+    ''' This runs only the snort benchmarks '''
+    
+    return
+    
+def ProcessLogFiles():
+    
+    ''' This processes all the log files in preperation for reporting '''    
+    
+    return
+    
     
 def CreateHTMLPage():
     
