@@ -7,10 +7,13 @@ Created on Sat Nov 10 23:14:52 2012
          
 """
 
-from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent, GetDateTime, CreateGraphs, ProcessMonitor, SysLogging
+from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent
+from PyIDSBenchFunc import GetDateTime, CreateGraphs, ProcessMonitor, SysLogging
+from PyIDSBenchFunc import InstallSuricata, InstallBro, InstallSnort
 from PyIDSBenchGlobals import *
 import sys
 import getopt
+import subprocess
 
 # This specifys the default options in the even that they aren't given by user
 directory = DEFAULT_SAVE_DIRECTORY
@@ -23,7 +26,7 @@ def main(argv):
     ''' This is the main function '''
         
     try:
-        opts, args = getopt.getopt(argv, "h?d:t:n:ap:vuigPL", ["help", "directory=", 
+        opts, args = getopt.getopt(argv, "h?d:t:n:ap:vum:igPL", ["help", "directory=", 
                                                           "ids_type=", "number_of_runs=", 
                                                           "pcap_file=", "unittests", "ids_check"])
     except getopt.GetoptError:
@@ -55,7 +58,7 @@ def main(argv):
             elif option == "-a":
                 print "run all tests"
             
-            elif option in ("-p", "--pcap_file"):
+            elif option in ("-p", "-E-pcap_file"):
                 pcap_file = argument
                 DEFAULT_PCAP_FILE = pcap_file
                 print pcap_file
@@ -64,7 +67,17 @@ def main(argv):
                 PrintVersion()
             
             elif option in ("-u", "--unittests"):
-                print "unit tests"
+                subprocess.Popen("suricata -u", shell=True).wait()
+                
+            elif option in ("-m"):
+                ids_type = argument
+                DEFAULT_IDS_TYPE = ids_type
+                if DEFAULT_IDS_TYPE == "suricata":                
+                    InstallSuricata()
+                elif DEFAULT_IDS_TYPE == "snort":
+                    InstallSnort()
+                elif DEFAULT_IDS_TYPE == "bro":
+                    InstallBro()
             
             elif option in ("-i", "--ids_check"):
                 WhatIDSArePresent()

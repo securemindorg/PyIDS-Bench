@@ -92,6 +92,8 @@ def ScriptUsage():
                                     are readily available, large and consist of various protocols.
         -i                      :   Check for present IDS's
         -v                      :   Prints Version Information
+        -u                      :   Runs Suricata Unittests to verify that everything is working correctly
+        -m [ids_name]           :   Installs Suricata
  
 	Example Usage:
 
@@ -246,6 +248,37 @@ def CreateGraphs():
     
     ''' This still needs added content for graphing the packet performance related items '''
 
+def InstallSuricata():
+    
+    ''' This function installs suricata, assuming a number of things are met '''
+
+    if not os.geteuid()==0:
+        sys.exit("\nOnly root can install Suricata in Fedora\n")
+
+    elif os.path.exists(DEFAULT_YUM_PATH)==True:
+        subprocess.Popen("yum -y install pcre* libyaml* file-devel", shell=True).wait()
+
+        if os.path.exists(DEFAULT_GCC_PATH)==False:
+            subprocess.Popen("yum groupinstall 'Development Tools'", shell=True).wait()
+            print "\nDevelopment Tools are now installed\n"     
+        
+        subprocess.Popen(DEFAULT_SURICATA_GIT_LOCATION)
+        subprocess.Popen(DEFAULT_SURICATA_INSTALLATION_COMMANDS, shell=True).wait()
+        print "\n\n Suricata is now installed \n\n"
+        subprocess.Popen(DEFAULT_SURICATA_MKDIR_LOG_DIR, shell=True).wait()
+
+    else:
+        sys.exit("\nYou do not appear to be running Fedora, or another RPM based distro\n")
+        
+def InstallSnort():
+
+    ''' This function installs Snort, assuming that a number of things are met '''    
+    
+    
+def InstallBro():
+    
+    ''' This function installs Bro, assuming that a numebr of things are met '''
+    
     
 def MinMaxMean(ResultsArray):
     
