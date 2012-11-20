@@ -24,6 +24,9 @@ from pylab import *                                             # used for forma
 import re
 
 
+###################################################################################
+###################################################################################
+
 def GetDateTime():
     
     ''' This function gets the data and time for logging reasons '''
@@ -33,6 +36,9 @@ def GetDateTime():
     ErrorTimeNow = datetime.datetime.now().strftime('%m/%d/%G -- %T - <Error> -')
 
     return InfoTimeNow, WarningTimeNow, ErrorTimeNow
+
+###################################################################################
+###################################################################################
     
 def SysLogging(logmessage):
     
@@ -46,7 +52,9 @@ def SysLogging(logmessage):
     
     logprocess = subprocess.Popen(BashLogger.split(), stdout=subprocess.PIPE)
     output = logprocess.communicate()[0]
-    
+   
+###################################################################################
+###################################################################################
 
 def ScriptUsage():
 
@@ -100,6 +108,8 @@ def ScriptUsage():
 	  #  pyidsbench -d /tmp/PyIDSTests -a -t 5 -s /tmp/test.pcap  
 
     '''
+###################################################################################
+###################################################################################
 
 def PrintVersion():
     
@@ -110,6 +120,9 @@ def PrintVersion():
     print
     
     return 
+
+###################################################################################
+###################################################################################
 
 def WhatIDSArePresent():
     
@@ -135,6 +148,8 @@ def WhatIDSArePresent():
     
     return 
     
+###################################################################################
+###################################################################################
     
 def ProcessMonitor(ProcessName):
 
@@ -179,6 +194,8 @@ def ProcessMonitor(ProcessName):
     APM = multiprocessing.Process(target=ActualProcessMonitor, args=(ProcessName,))
     APM.start()
     
+###################################################################################
+###################################################################################
 
 def CreateGraphs():
     
@@ -248,6 +265,9 @@ def CreateGraphs():
     
     ''' This still needs added content for graphing the packet performance related items '''
 
+###################################################################################
+###################################################################################
+
 def InstallSuricata():
     
     ''' This function installs suricata, assuming a number of things are met '''
@@ -269,16 +289,23 @@ def InstallSuricata():
 
     else:
         sys.exit("\nYou do not appear to be running Fedora, or another RPM based distro\n")
+
+###################################################################################
+###################################################################################
         
 def InstallSnort():
 
     ''' This function installs Snort, assuming that a number of things are met '''    
     
+###################################################################################
+###################################################################################
     
 def InstallBro():
     
     ''' This function installs Bro, assuming that a numebr of things are met '''
     
+###################################################################################
+###################################################################################
     
 def MinMaxMean(ResultsArray):
     
@@ -286,12 +313,17 @@ def MinMaxMean(ResultsArray):
     
     return Min, Max, Mean
     
+###################################################################################
+###################################################################################
 
 def StandardDeviation():
     
     ''' This function calculates the standard deviation of the multiple test runs '''
     
     return StandardDev
+
+###################################################################################
+###################################################################################
     
 def RunAllTests():
     
@@ -301,6 +333,9 @@ def RunAllTests():
     SnortTests()
     
     return
+
+###################################################################################
+###################################################################################
     
 def SuricataTests():
     
@@ -309,12 +344,18 @@ def SuricataTests():
     os.remove(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE)    
     
     return
+
+###################################################################################
+###################################################################################
     
 def SnortTests():
     
     ''' This runs only the snort benchmarks '''
     
     return
+
+###################################################################################
+###################################################################################
 
 def SuricataStatsParser():
     
@@ -376,20 +417,52 @@ def SuricataStatsParser():
     # Close the files
     suristatslog.close()
     outputsuricatastatscsv.close()
+
+###################################################################################
+###################################################################################
     
+def SnortStatsParser():
     
+    ''' Simular to the suricata stats.log parser, this one takes the allready almost correct csv format for
+    Snort and converts it to a format we can use '''
+
+###################################################################################
+###################################################################################
+    
+def BroStatsParser():
+    
+    ''' Again simular but different, this function takes care of getting stats from Bro and putting then in
+    a format that we can deal with. '''
+
+###################################################################################
+###################################################################################
+
 def ProcessLogFiles():
     
-    ''' This processes all the log files in preperation for reporting '''    
+    ''' This processes all the log files in preperation for reporting '''
+
+
+    def MaxMeanOfAColumn():
+        
+        ''' This function gets the Maximum Value and Mean Value of a Column of data from any CSV file given to it '''
+        
+    def GetStandardDeviationOfRuns():
+        
+        ''' This function takes the Max Value and Mean Value from a number and calculates a standard deviation '''
     
     return
     
+###################################################################################
+###################################################################################
     
 def CreateHTMLPage():
     
     ''' This function creates the output webpage '''
     
     return HTMLUpdate
+
+###################################################################################
+###################################################################################
     
 def RunWebServer():
     
