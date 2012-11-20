@@ -26,7 +26,7 @@ def main(argv):
     ''' This is the main function '''
         
     try:
-        opts, args = getopt.getopt(argv, "h?d:t:n:ap:vum:igPL", ["help", "directory=", 
+        opts, args = getopt.getopt(argv, "h?d:t:n:ap:vum:igPLK", ["help", "directory=", 
                                                           "ids_type=", "number_of_runs=", 
                                                           "pcap_file=", "unittests", "ids_check"])
     except getopt.GetoptError:
@@ -97,6 +97,10 @@ def main(argv):
             elif option in ("-L"):
                 ''' same deal, this is a test statement for the logger function '''
                 SysLogging("This is a test and only a test")
+ 
+           elif option in ("-K"):
+                ''' same deal, this is a test for the suricata log parser '''
+                SuricataStatsParser()
 #    else:
 #        InfoTimeNow, WarningTimeNow, ErrorTimeNow = GetDateTime()
 #        print ErrorTimeNow, "You did not specify any command line options:"
