@@ -21,7 +21,7 @@ from matplotlib.mlab import csv2rec                             # easier csv rea
 import matplotlib.pyplot as plt                                 # easier calling of matplotlib.pyplot
 import matplotlib.dates as mdates                               # neat function for working with date formats
 from pylab import *                                             # used for formatting the graphs
-
+import re
 
 
 def GetDateTime():
@@ -306,6 +306,8 @@ def SuricataTests():
     
     ''' This runs only the suricata benchmarks '''
     
+    os.remove(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE)    
+    
     return
     
 def SnortTests():
@@ -313,6 +315,55 @@ def SnortTests():
     ''' This runs only the snort benchmarks '''
     
     return
+
+def SuricataStatsParser():
+    
+    ''' This function processes the suricata stats.log file to get things like pps '''
+
+    suristatslog = open(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE)
+    outputsuricatastatscsv = open(DEFAULT_SURICATA_STATS_OUTPUT_FILE, 'a')    
+
+    new_list = []
+    title_line = []
+
+    fields = ["decoder.pkts ", "decoder.bytes ", "decoder.ipv4 ", "decoder.ipv6 ",              
+    "decoder.ethernet ", "decoder.raw ", "decoder.sll ", "decoder.tcp ",               
+    "decoder.udp ", "decoder.sctp ", "decoder.icmpv4 ", "decoder.icmpv6 ",            
+    "decoder.ppp ", "decoder.pppoe ", "decoder.gre ", "decoder.vlan ",             
+    "decoder.teredo ", "decoder.ipv4_in_ipv6 ", "decoder.ipv6_in_ipv6 ",     
+    "decoder.avg_pkt_size ", "decoder.max_pkt_size ", "defrag.ipv4.fragments ",    
+    "defrag.ipv4.reassembled ", "defrag.ipv4.timeouts ", "defrag.ipv6.fragments ",    
+    "defrag.ipv6.reassembled ", "defrag.ipv6.timeouts ", "defrag.max_frag_hits ",     
+    "tcp.sessions ", "tcp.ssn_memcap_drop ", "tcp.pseudo ", "tcp.invalid_checksum ",     
+    "tcp.no_flow ", "tcp.reused_ssn ", "tcp.memuse ", "tcp.syn ", "tcp.synack ",               
+    "tcp.rst ", "tcp.segment_memcap_drop ", "tcp.stream_depth_reached ", 
+    "tcp.reassembly_memuse ", "tcp.reassembly_gap ", "detect.alert ",             
+    "flow_mgr.closed_pruned ", "flow_mgr.new_pruned ", "flow_mgr.est_pruned ",      
+    "flow.memuse ", "flow.spare ", "flow.emerg_mode_entered ", "flow.emerg_mode_over "]
+    
+    for line in suristatslog:
+        if re.match("Date:", line):
+            s = map(lambda x:x.strip(""),line.split(' '))[1] + " " + map(lambda x:x.strip(""), line.split(' '))[3].strip()
+            new_list.append("\n")
+            new_list.append(str(s).strip() + ",")
+
+        else:
+            for item in fields:
+                if re.match(item, line):
+                    s = map(lambda x:x.strip(" "), line.split('|'))[2].strip()
+                    new_list.append(str(s).strip() + ",")
+        
+
+    
+    for item in fields:
+        s = item.strip() + ","
+        title_line.append(str(s))
+    
+    outputsuricatastatscsv.write("Date," + "".join(title_line))
+    outputsuricatastatscsv.write("".join(new_list) + "\n")    
+    suristatslog.close()
+    outputsuricatastatscsv.close()
+    
     
 def ProcessLogFiles():
     

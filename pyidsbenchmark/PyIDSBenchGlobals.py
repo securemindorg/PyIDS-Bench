@@ -29,7 +29,7 @@ SURICATA_OPTOMIZED_NO_RULES_DEFAULT_CONFIG = " "
 SURICATA_OPTOMIZED_OPEN_ET_RULESET_CONFIG = " "
 SURICATA_OPTOMIZED_VRT_FREE_RULESET_CONFIG = " "
 
-SURICATA_DEFAULT_LOG_DIR = "/var/log/suricata"
+SURICATA_DEFAULT_LOG_DIR = "/usr/local/var/log/suricata/"
 
 SNORT_DEFUALT_NO_RULES_DEFAULT_CONFIG = " "
 SNORT_DEFUALT_OPEN_ET_RULESET_CONFIG = " "
@@ -43,7 +43,8 @@ SNORT_OPTOMIZED_VRT_FREE_RULESET_CONFIG = " "
 DEFAULT_SURICATA_GIT_LOCATION = "git clone git://phalanx.openinfosecfoundation.org/oisf.git"
 DEFAULT_SURICATA_INSTALLATION_COMMANDS = "cd oisf/ && ./autogen && ./configure --enable-unittests --enable-profiling && make && make install && make install-full"
 DEFAULT_SURICATA_MKDIR_LOG_DIR = "mkdir " + SURICATA_DEFAULT_LOG_DIR
-
+DEFAULT_SURICATA_STATS_FILE = "stats.log"
+DEFAULT_SURICATA_STATS_OUTPUT_FILE = "/tmp/suricata_stats_output.csv"
 # The globals below are not to be modified, they are simply default values that are being initialized
 
 ProcessName = "firefox"
