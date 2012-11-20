@@ -296,6 +296,18 @@ def InstallSuricata():
 def InstallSnort():
 
     ''' This function installs Snort, assuming that a number of things are met '''    
+    '''
+    "wget " + DEFAULT_SNORT_DOWNLOAD_LOCATION
+    "tar xvfz snort*"
+    "cd snort*
+    "tar xvfz daq*"
+    "cd daq* && ./configure && make && make install "
+    '''
+    
+    # note that snort is picky about installation on different operating systems
+    # as such I'm not bothering at this point to add an installer, I think that 
+    # instead we should run all of the tests on something like security onion with
+    # all of the brunt work done for us already    
     
 ###################################################################################
 ###################################################################################
@@ -357,7 +369,7 @@ def SnortTests():
 ###################################################################################
 ###################################################################################
 
-def SuricataStatsParser():
+def SuricataStatsLogParser():
     
     ''' This function processes the suricata stats.log file to get things like pps '''
 
@@ -409,7 +421,7 @@ def SuricataStatsParser():
         title_line.append(str(s))
 
     # Create the title row    
-    outputsuricatastatscsv.write("Date," + "".join(title_line))
+    outputsuricatastatscsv.write("time," + "".join(title_line))
 
     # Write the actual array data, and add in newline characters 
     outputsuricatastatscsv.write("".join(new_list) + "\n")  
@@ -421,10 +433,74 @@ def SuricataStatsParser():
 ###################################################################################
 ###################################################################################
     
-def SnortStatsParser():
+def SnortStatsLogParser():
     
     ''' Simular to the suricata stats.log parser, this one takes the allready almost correct csv format for
     Snort and converts it to a format we can use '''
+
+    ''' This function processes the suricata stats.log file to get things like pps '''
+
+    # open the stats log for reading, and the csv file for writing
+    snortstatslog = open(DEFAULT_SNORT_STATS_LOG_DIR + DEFAULT_SNORT_STATS_FILE)
+    outputsnortstatscsv = open(DEFAULT_SNORT_STATS_OUTPUT_FILE, 'a')    
+    
+    # I'm defining these locally so that it's reset each time the function is called
+    new_list = []       
+    title_line = []     
+
+    fields =  "time","pkt_drop_percent","wire_mbits_per_sec.realtime","alerts_per_second",\
+              "kpackets_wire_per_sec.realtime","avg_bytes_per_wire_packet","patmatch_percent","syns_per_second",\
+              "synacks_per_second","new_sessions_per_second","deleted_sessions_per_second","total_sessions",\
+              "max_sessions","stream_flushes_per_second","stream_faults","stream_timeouts","frag_creates_per_second",\
+              "frag_completes_per_second","frag_inserts_per_second","frag_deletes_per_second",\
+              "frag_autofrees_per_second","frag_flushes_per_second","current_frags","max_frags,frag_timeouts",\
+              "frag_faults","iCPUs","usr[0]","sys[0]","idle[0]","wire_mbits_per_sec.realtime",\
+              "ipfrag_mbits_per_sec.realtime","ipreass_mbits_per_sec.realtime","rebuilt_mbits_per_sec.realtime",\
+              "mbits_per_sec.realtime","avg_bytes_per_wire_packet","avg_bytes_per_ipfrag_packet",\
+              "avg_bytes_per_ipreass_packet","avg_bytes_per_rebuilt_packet","avg_bytes_per_packet",\
+              "kpackets_wire_per_sec.realtime","kpackets_ipfrag_per_sec.realtime",\
+              "kpackets_ipreass_per_sec.realtime","kpackets_rebuilt_per_sec.realtime",\
+              "kpackets_per_sec.realtime","pkt_stats.pkts_recv","pkt_stats.pkts_drop","total_blocked_packets",\
+              "new_udp_sessions_per_second","deleted_udp_sessions_per_second","total_udp_sessions",\
+              "max_udp_sessions","max_tcp_sessions_interval","curr_tcp_sessions_initializing",\
+              "curr_tcp_sessions_established","curr_tcp_sessions_closing","tcp_sessions_midstream_per_second",\
+              "tcp_sessions_closed_per_second","tcp_sessions_timedout_per_second","tcp_sessions_pruned_per_second",\
+              "tcp_sessions_dropped_async_per_second","current_attribute_hosts","attribute_table_reloads",\
+              "mpls_mbits_per_sec.realtime","avg_bytes_per_mpls_packet","kpackets_per_sec_mpls.realtime",\
+              "total_tcp_filtered_packets","total_udp_filtered_packets","ip4::trim","ip4::tos","ip4::df","ip4::rf",\
+              "ip4::ttl","ip4::opts","icmp4::echo","ip6::ttl","ip6::opts","icmp6::echo","tcp::syn_opt","tcp::opt,tcp::pad",\
+              "tcp::rsv","tcp::ns","tcp::urg","tcp::urp","tcp::trim","tcp::ecn_pkt","tcp::ecn_ssn","tcp::ts_ecr","tcp::ts_nop",\
+              "tcp::ips_data","tcp::block","total_injected_packets","frag3_mem_in_use","stream5_mem_in_use"
+    
+    def ConvertUnixTime(UnixTime):
+    
+        ''' This function exists simply to convert the snort timestamp to pylots usable format '''
+    
+        times = (datetime.datetime.fromtimestamp(int(UnixTime)).strftime('%m/%d/%Y -- %H:%M:%S'))
+    
+        return times 
+
+    for line in open("/var/log/snort/snort.stats"):
+        line=line.strip()
+        if not line.startswith("#"):
+            times = ConvertUnixTime(line[0:10])
+            new_list.append(times)
+            new_list.append(line[10:] + "\n")
+
+    # Create the title row    
+    for item in fields:
+        s = item.strip() + ","
+        title_line.append(str(s))
+
+    outputsnortstatscsv.write("".join(title_line))
+
+    # Write the actual array data, and add in newline characters 
+    outputsnortstatscsv.write("".join(new_list) + "\n")  
+    
+    # Close the files
+    snortstatslog.close()
+    outputsnortstatscsv.close()
+
 
 ###################################################################################
 ###################################################################################
@@ -433,6 +509,8 @@ def BroStatsParser():
     
     ''' Again simular but different, this function takes care of getting stats from Bro and putting then in
     a format that we can deal with. '''
+    
+    
 
 ###################################################################################
 ###################################################################################

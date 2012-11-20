@@ -10,6 +10,7 @@ Created on Sat Nov 10 23:14:52 2012
 from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent
 from PyIDSBenchFunc import GetDateTime, CreateGraphs, ProcessMonitor, SysLogging
 from PyIDSBenchFunc import InstallSuricata, InstallBro, InstallSnort
+from PyIDSBenchFunc import SuricataStatsParser, SnortStatsParser
 from PyIDSBenchGlobals import *
 import sys
 import getopt
@@ -26,7 +27,7 @@ def main(argv):
     ''' This is the main function '''
         
     try:
-        opts, args = getopt.getopt(argv, "h?d:t:n:ap:vum:igPLK", ["help", "directory=", 
+        opts, args = getopt.getopt(argv, "h?d:t:n:ap:vum:igPLKW", ["help", "directory=", 
                                                           "ids_type=", "number_of_runs=", 
                                                           "pcap_file=", "unittests", "ids_check"])
     except getopt.GetoptError:
@@ -98,9 +99,14 @@ def main(argv):
                 ''' same deal, this is a test statement for the logger function '''
                 SysLogging("This is a test and only a test")
  
-           elif option in ("-K"):
+            elif option in ("-K"):
                 ''' same deal, this is a test for the suricata log parser '''
-                SuricataStatsParser()
+                SuricataStatsLogParser()
+
+            elif option in ("-W"):
+                ''' same deal this time for snort '''
+                SnortStatsLogParser()
+
 #    else:
 #        InfoTimeNow, WarningTimeNow, ErrorTimeNow = GetDateTime()
 #        print ErrorTimeNow, "You did not specify any command line options:"

@@ -45,6 +45,14 @@ DEFAULT_SURICATA_INSTALLATION_COMMANDS = "cd oisf/ && ./autogen && ./configure -
 DEFAULT_SURICATA_MKDIR_LOG_DIR = "mkdir " + SURICATA_DEFAULT_LOG_DIR
 DEFAULT_SURICATA_STATS_FILE = "stats.log"
 DEFAULT_SURICATA_STATS_OUTPUT_FILE = "/tmp/suricata_stats_output.csv"
+
+DEFAULT_SNORT_DOWNLOAD_LOCATION = "http://downloads.sourceforge.net/project/snort/snort/snort-2.9.3.1.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fsnort%2F%3Fsource%3Ddirectory&ts=1353445325&use_mirror=heanet"
+DEFAULT_SNORT_VERSION = "snort-2.9.3.1.tar.gz"
+DEFAULT_DAQ_DOWNLOAD_LOCATION = "http://www.snort.org/downloads/1850"
+DEFAULT_SNORT_STATS_LOG_DIR = "/var/log/snort/"
+DEFAULT_SNORT_STATS_FILE = "snort.stats"
+DEFAULT_SNORT_STATS_OUTPUT_FILE = "/tmp/snort_stats_output.csv"
+
 # The globals below are not to be modified, they are simply default values that are being initialized
 
 ProcessName = "firefox"
