@@ -320,12 +320,16 @@ def SuricataStatsParser():
     
     ''' This function processes the suricata stats.log file to get things like pps '''
 
+    # open the stats log for reading, and the csv file for writing
     suristatslog = open(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE)
     outputsuricatastatscsv = open(DEFAULT_SURICATA_STATS_OUTPUT_FILE, 'a')    
 
-    new_list = []
-    title_line = []
+    # I'm defining these locally so that it's reset each time the function is called
+    new_list = []       
+    title_line = []     
 
+    # This giant list is of the values that exist in the suricata stats.log file by default, 
+    # the spaces are intentianal, they make sure that it's an exact match
     fields = ["decoder.pkts ", "decoder.bytes ", "decoder.ipv4 ", "decoder.ipv6 ",              
     "decoder.ethernet ", "decoder.raw ", "decoder.sll ", "decoder.tcp ",               
     "decoder.udp ", "decoder.sctp ", "decoder.icmpv4 ", "decoder.icmpv6 ",            
@@ -341,6 +345,10 @@ def SuricataStatsParser():
     "flow_mgr.closed_pruned ", "flow_mgr.new_pruned ", "flow_mgr.est_pruned ",      
     "flow.memuse ", "flow.spare ", "flow.emerg_mode_entered ", "flow.emerg_mode_over "]
     
+    # for each line in the stats.log file, if the line eaquals the Date, then strip the line for only the date
+    # and append it to the new list. If the line does not match the the Date then take then:
+    # if the the line does match one of the fields as defined in the field list, then strip it for its value
+    # and append it to the new_list. 
     for line in suristatslog:
         if re.match("Date:", line):
             s = map(lambda x:x.strip(""),line.split(' '))[1] + " " + map(lambda x:x.strip(""), line.split(' '))[3].strip()
@@ -354,13 +362,18 @@ def SuricataStatsParser():
                     new_list.append(str(s).strip() + ",")
         
 
-    
+    # Stip out any remaining whitespace from the list
     for item in fields:
         s = item.strip() + ","
         title_line.append(str(s))
-    
+
+    # Create the title row    
     outputsuricatastatscsv.write("Date," + "".join(title_line))
-    outputsuricatastatscsv.write("".join(new_list) + "\n")    
+
+    # Write the actual array data, and add in newline characters 
+    outputsuricatastatscsv.write("".join(new_list) + "\n")  
+    
+    # Close the files
     suristatslog.close()
     outputsuricatastatscsv.close()
     
