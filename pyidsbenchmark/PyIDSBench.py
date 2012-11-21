@@ -7,6 +7,29 @@ Created on Sat Nov 10 23:14:52 2012
          
 """
 
+''' For my own notes: 11/21/12 - 12:18am : Need the following:
+    
+    Have to be able to take multiple command line options like:
+        
+        python PyIDSBench.py -t suricata -n 5 -p test.pcap
+    
+    Then the call will be like:
+        
+        SuricataTests(5,"test.pcap")
+    
+    Then imediately process the stats.log files with:
+        
+        SuricataStatsLogParser(UNIQUE_RUNS_ID, DEFAULT_NUMBER_OF_RUNS)
+
+        ### I should note that the stats log parser can't handle that input yet    
+    
+    Then finally get the Max's and Means and calculate the standard deviations
+    
+        StandardDeviation(UNIQUE_RUNS_ID, DEFAULT_NUMBER_OF_RUNS)
+
+            This function in turn will call the MaxMean() function as needed
+'''
+
 from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent
 from PyIDSBenchFunc import GetDateTime, CreateGraphs, ProcessMonitor, SysLogging
 from PyIDSBenchFunc import InstallSuricata, InstallBro, InstallSnort

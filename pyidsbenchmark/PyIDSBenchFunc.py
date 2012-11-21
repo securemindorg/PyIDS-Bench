@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt                                 # easier calling
 import matplotlib.dates as mdates                               # neat function for working with date formats
 from pylab import *                                             # used for formatting the graphs
 import re
+import shutil
 
 
 ###################################################################################
@@ -282,7 +283,7 @@ def InstallSuricata():
             subprocess.Popen("yum groupinstall 'Development Tools'", shell=True).wait()
             print "\nDevelopment Tools are now installed\n"     
         
-        subprocess.Popen(DEFAULT_SURICATA_GIT_LOCATION)
+        subprocess.Popen(DEFAULT_SURICATA_GIT_LOCATION, shell=True).wait()
         subprocess.Popen(DEFAULT_SURICATA_INSTALLATION_COMMANDS, shell=True).wait()
         print "\n\n Suricata is now installed \n\n"
         subprocess.Popen(DEFAULT_SURICATA_MKDIR_LOG_DIR, shell=True).wait()
@@ -349,13 +350,41 @@ def RunAllTests():
 ###################################################################################
 ###################################################################################
     
-def SuricataTests():
+def SuricataTests(DEFAULT_NUMBER_OF_RUNS, CURRENT_PCAP_NAME):
     
-    ''' This runs only the suricata benchmarks '''
+    ''' This runs only the suricata benchmarks, it requires that a default 
+    number of runs be specified, if they are not then it defaults to 1 '''
+
+    # This gives this series of runs a unique ID
+    UNIQUE_RUNS_ID = "suricata-" + str(time.time())
+
+    # This is just initializeing the loop counter
+    count = 1    
     
-    os.remove(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE)    
+    # The while loop takes care of the multiple runs issue, and since
+    # the DEFAUL_NUMBER_OF_RUNS is passed into the function we can use 
+    # later for other things on the outside
+    while count <= DEFAULT_NUMBER_OF_RUNS:
+        
+        # Clean Up Old Stats.Log File
+        os.remove(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE)  
+        
+        # Setup the Suricata current run using the specified config file and pcap
+        Suricata_Run_Command = "suricata -c " + SURICATA_CURRENT_CONFIG_FILE + " -r " + CURRENT_PCAP_FILE  
+        
+        # Run the previous command as a subprocess and display in the shell
+        subprocess.Popen(Suricata_Run_Command, shell=True).wait()
+        
+        # Move the stats.log from the run and place it in the output folder under 
+        # a unique tests timestamp folder so that we can go back to it later
+        shutil.move(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE,\
+        "./output/runs/" + UNIQUE_RUNS_ID + "/" + suricata_stats_run_count_name + count)
+        
+        # incriment the loop counter
+        count = count + 1
     
-    return
+    # return the unique id value, this is necessary since we'll need it to process the log files
+    return UNIQUE_RUNS_ID
 
 ###################################################################################
 ###################################################################################
@@ -369,7 +398,7 @@ def SnortTests():
 ###################################################################################
 ###################################################################################
 
-def SuricataStatsLogParser():
+def SuricataStatsLogParser(UNIQUE_RUNS_ID, DEFAULT_NUMBER_OF_RUNS):
     
     ''' This function processes the suricata stats.log file to get things like pps '''
 
