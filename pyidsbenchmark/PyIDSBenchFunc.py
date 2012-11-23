@@ -355,6 +355,9 @@ def SuricataTests(DEFAULT_NUMBER_OF_RUNS, CURRENT_PCAP_NAME):
     ''' This runs only the suricata benchmarks, it requires that a default 
     number of runs be specified, if they are not then it defaults to 1 '''
 
+    DEFAULT_NUMBER_OF_RUNS = DEFAULT_NUMBER_OF_RUNS
+    CURRENT_PCAP_FILE = CURRENT_PCAP_NAME
+
     # This gives this series of runs a unique ID
     UNIQUE_RUNS_ID = "suricata-" + str(time.time())
 
@@ -364,21 +367,28 @@ def SuricataTests(DEFAULT_NUMBER_OF_RUNS, CURRENT_PCAP_NAME):
     # The while loop takes care of the multiple runs issue, and since
     # the DEFAUL_NUMBER_OF_RUNS is passed into the function we can use 
     # later for other things on the outside
-    while count <= DEFAULT_NUMBER_OF_RUNS:
+    while count <= int(DEFAULT_NUMBER_OF_RUNS):
         
         # Clean Up Old Stats.Log File
-        os.remove(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE)  
+        Suricata_Log_Exists = os.path.exists(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE)
+
+        if Suricata_Log_Exists == True:
+            os.remove(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE)  
         
         # Setup the Suricata current run using the specified config file and pcap
         Suricata_Run_Command = "suricata -c " + SURICATA_CURRENT_CONFIG_FILE + " -r " + CURRENT_PCAP_FILE  
-        
+
         # Run the previous command as a subprocess and display in the shell
         subprocess.Popen(Suricata_Run_Command, shell=True).wait()
         
         # Move the stats.log from the run and place it in the output folder under 
         # a unique tests timestamp folder so that we can go back to it later
-        shutil.move(SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE,\
-        "./output/runs/" + UNIQUE_RUNS_ID + "/" + suricata_stats_run_count_name + count)
+        inputfile = SURICATA_DEFAULT_LOG_DIR + DEFAULT_SURICATA_STATS_FILE
+        outputdir = "output/runs/" + str(UNIQUE_RUNS_ID) + "/"
+        if not os.path.exists(outputdir):
+            os.makedirs(outputdir)
+
+        shutil.move(inputfile, outputdir + suricata_stats_run_count_name + str(count))
         
         # incriment the loop counter
         count = count + 1

@@ -7,21 +7,7 @@ Created on Sat Nov 10 23:14:52 2012
          
 """
 
-''' For my own notes: 11/21/12 - 12:18am : Need the following:
-    
-    Have to be able to take multiple command line options like:
-        
-        python PyIDSBench.py -t suricata -n 5 -p test.pcap
-    
-    Then the call will be like:
-        
-        SuricataTests(5,"test.pcap")
-    
-    Then imediately process the stats.log files with:
-        
-        SuricataStatsLogParser(UNIQUE_RUNS_ID, DEFAULT_NUMBER_OF_RUNS)
-
-        ### I should note that the stats log parser can't handle that input yet    
+''' For my own notes: Updated 11/23/12 - 4:54am : Need the following:   
     
     Then finally get the Max's and Means and calculate the standard deviations
     
@@ -33,7 +19,8 @@ Created on Sat Nov 10 23:14:52 2012
 from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent
 from PyIDSBenchFunc import GetDateTime, CreateGraphs, ProcessMonitor, SysLogging
 from PyIDSBenchFunc import InstallSuricata, InstallBro, InstallSnort
-from PyIDSBenchFunc import SuricataStatsParser, SnortStatsParser
+from PyIDSBenchFunc import SuricataTests, SnortTests
+from PyIDSBenchFunc import SuricataStatsLogParser, SnortStatsLogParser
 from PyIDSBenchGlobals import *
 import sys
 import getopt
@@ -52,8 +39,9 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "h?d:t:n:ap:vum:igPLKW", ["help", "directory=", 
                                                           "ids_type=", "number_of_runs=", 
-                                                          "pcap_file=", "unittests", "ids_check"])
+                                                         "pcap_file=", "unittests", "ids_check"])
     except getopt.GetoptError:
+        ScriptUsage()
         sys.exit(2)
        
     if opts > 0:
@@ -69,10 +57,15 @@ def main(argv):
                 DEFAULT_SAVE_DIRECTORY = directory
                 print directory
             
-            elif option in ("-t", "--ids_type"):
+            elif option in ("-m"):
                 ids_type = argument
                 DEFAULT_IDS_TYPE = ids_type
-                print ids_type
+                if DEFAULT_IDS_TYPE == "suricata":                
+                    InstallSuricata()
+                elif DEFAULT_IDS_TYPE == "snort":
+                    InstallSnort()
+                elif DEFAULT_IDS_TYPE == "bro":
+                    InstallBro()
             
             elif option in ("-n", "--number_of_runs"):
                 number_of_runs = argument
@@ -84,7 +77,7 @@ def main(argv):
             
             elif option in ("-p", "-E-pcap_file"):
                 pcap_file = argument
-                DEFAULT_PCAP_FILE = pcap_file
+                CURRENT_PCAP_FILE = pcap_file
                 print pcap_file
                 
             elif option == "-v":
@@ -93,15 +86,13 @@ def main(argv):
             elif option in ("-u", "--unittests"):
                 subprocess.Popen("suricata -u", shell=True).wait()
                 
-            elif option in ("-m"):
+            elif option in ("-t", "--ids_type"):
                 ids_type = argument
                 DEFAULT_IDS_TYPE = ids_type
                 if DEFAULT_IDS_TYPE == "suricata":                
-                    InstallSuricata()
+                    SuricataTests(DEFAULT_NUMBER_OF_RUNS, CURRENT_PCAP_FILE)
                 elif DEFAULT_IDS_TYPE == "snort":
-                    InstallSnort()
-                elif DEFAULT_IDS_TYPE == "bro":
-                    InstallBro()
+                    SnortTests()
             
             elif option in ("-i", "--ids_check"):
                 WhatIDSArePresent()
@@ -129,12 +120,9 @@ def main(argv):
             elif option in ("-W"):
                 ''' same deal this time for snort '''
                 SnortStatsLogParser()
-
-#    else:
-#        InfoTimeNow, WarningTimeNow, ErrorTimeNow = GetDateTime()
-#        print ErrorTimeNow, "You did not specify any command line options:"
-#        ScriptUsage()
     
 if __name__ == "__main__":
     main(sys.argv[1:])
     
+# -*- coding: utf-8 -*-
+
