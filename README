@@ -33,3 +33,14 @@ Installation is straight forward.
 git clone https://github.com/securemindorg/PyIDS-Bench.git
 cd PyIDS-Bench
 python setup.py install
+
+
+Running
+=======
+
+Currently (11/23/12) we support running tests on Suricata:
+
+python PyIDSBench.py -n 2 -p "klpd.pcap" -t suricata
+
+which runs suricata twice on the klpd.pcap... This obviously only works if 
+you have a config file for suricata allready setup and you have the klpd.pcap.
