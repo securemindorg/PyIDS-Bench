@@ -1,0 +1,694 @@
+
+
+Sample: 
+
+Suricata - Standard Deviations All Runs PPS
+n=5 avg=576065.600000  stddev=4316.289008
+Snort - Standard Deviations All Runs PPS
+n=5 avg=254077.200000  stddev=5386.261524
+Suricata - Standard Deviations All Runs Core Utilization (%)
+n=5 avg=97.122380  stddev=0.197120
+Snort - Standard Deviations All Runs Core Utilization (%)
+n=5 avg=107.375000  stddev=6.029883
+Suricata - Standard Deviations All Runs Memory Usage in (KB)
+n=5 avg=134431.200000  stddev=3959.303815
+Snort - Standard Deviations All Runs Memory Usage (KB)
+n=5 avg=137336.600000  stddev=1040.057114
+Suricata - Standard Deviations All Runs - Run Time (Seconds)
+n=5 avg=17.400000  stddev=0.547723
+Snort - Standard Deviations All Runs - Run Time (Seconds)
+n=5 avg=1327.000000  stddev=0.000000
+
+Averages Column:
+cat ictf2010pcap_based_runs/test_output_no_rules_tweeked/std_run_log | sed '1d;/^[S]/d;/^$/d;s/^[ ]*//;s/[ ]\+/,/g' | cut -d= -f 3 | cut -d, -f 1
+
+
+Standard Deviations Column:
+cat ictf2010pcap_based_runs/test_output_no_rules_tweeked/std_run_log | sed '1d;/^[S]/d;/^$/d;s/^[ ]*//;s/[ ]\+/,/g' | cut -d= -f 4
+
+### Scripts #######################
+###################################
+
+SYSTEM_CONFIG_DIR=""
+SYSTEM_CONFIG_DIR_1="1cpu_48g-std-t1"
+SYSTEM_CONFIG_DIR_2="2cpu_48g-std-t1"
+SYSTEM_CONFIG_DIR_3="3cpu_48g-std-t1"
+SYSTEM_CONFIG_DIR_4="4cpu_48g-std-t1"
+SYSTEM_CONFIG_DIR_5="5cpu_48g-std-t1"
+SYSTEM_CONFIG_DIR_6="6cpu_48g-std-t1"
+SYSTEM_CONFIG_DIR_7="8cpu_48g-std-t1"
+SYSTEM_CONFIG_DIR_8="12cpu_48g-std-t1"
+SYSTEM_CONFIG_DIR_9="18cpu_48g-std-t1"
+SYSTEM_CONFIG_DIR_10="24cpu_48g-std-t1"
+
+PCAP_SUB_DIR=""
+PCAP_SUB_DIR1="ictf2010pcap_based_runs"
+PCAP_SUB_DIR2="pytbull_allpcap_based_runs"
+PCAP_SUB_DIR3="pytbull_t1pcap_based_run"
+PCAP_SUB_DIR4="pytbull_t2pcap_based_runs"
+PCAP_SUB_DIR5="pytbull_t3pcap_based_runs"
+PCAP_SUB_DIR6="pytbull_t4pcap_based_runs"
+PCAP_SUB_DIR7="pytbull_t5pcap_based_runs"
+PCAP_SUB_DIR8="pytbull_t6pcap_based_runs"
+PCAP_SUB_DIR9="pytbull_t7pcap_based_runs"
+PCAP_SUB_DIR10="pytbull_t8pcap_based_runs"
+PCAP_SUB_DIR11="pytbull_t9pcap_based_runs"
+
+
+INDIVIDUAL_TESTS_LOG_DIRECTORY=""
+INDIVIDUAL_TESTS_LOG_DIRECTORY_NO_RULES="test_output_no_rules"
+INDIVIDUAL_TESTS_LOG_DIRECTORY_ET_FREE_RULES="test_output_et_free_rules"
+INDIVIDUAL_TESTS_LOG_DIRECTORY_ET_PRO_RULES="test_output_et_pro_rules"
+INDIVIDUAL_TESTS_LOG_DIRECTORY_NO_RULES_SURICATA_OPTOMIZED="test_output_no_rules_tweeked"
+INDIVIDUAL_TESTS_LOG_DIRECTORY_ET_FREE_RULES_SURICATA_OPTOMIZED="test_output_et_free_rules_tweeked"
+
+
+### MASTER PROCESS LOGS FUNCTION ###
+
+function PROCESS_FINAL_STUDY_LOGS {
+
+echo "
+SYSTEM CONFIGURATION,TEST PCAP,RULE CONFIGURATION,\
+Suricata PPS Average, Suricata PPS Stdev,\
+Snort PPS Average, Snort PPS Stdev,\
+Suricata Core Utilization Average, Suricata Core Utilization Stdev,\
+Snort Core Utilization Average, Snort Core Utilization Stdev,\
+Suricata Memory Usage (KB) Average, Suricata Memory Usage (KB) Stdev,\ 
+Snort Memory Usage (KB) Average, Snort Memory Usage (KB) Stdev,\
+Suricata Run Time (Seconds) Average, Suricata Run Time (Seconds) Standard Deviations,\
+Snort Run Time (Seconds) Average, Snort Run Time (Seconds) Standard Deviations,
+" > almost_done_temp.file
+
+SYSTEM_CONFIG_DIR=$SYSTEM_CONFIG_DIR_1
+
+  GET_STDEV_LOG_DATA_SET_PCAP_PARM
+
+SYSTEM_CONFIG_DIR=$SYSTEM_CONFIG_DIR_2
+
+  GET_STDEV_LOG_DATA_SET_PCAP_PARM
+
+SYSTEM_CONFIG_DIR=$SYSTEM_CONFIG_DIR_3
+
+  GET_STDEV_LOG_DATA_SET_PCAP_PARM
+
+SYSTEM_CONFIG_DIR=$SYSTEM_CONFIG_DIR_4
+
+  GET_STDEV_LOG_DATA_SET_PCAP_PARM
+
+SYSTEM_CONFIG_DIR=$SYSTEM_CONFIG_DIR_5
+
+  GET_STDEV_LOG_DATA_SET_PCAP_PARM
+
+SYSTEM_CONFIG_DIR=$SYSTEM_CONFIG_DIR_6
+
+  GET_STDEV_LOG_DATA_SET_PCAP_PARM
+
+SYSTEM_CONFIG_DIR=$SYSTEM_CONFIG_DIR_7
+
+  GET_STDEV_LOG_DATA_SET_PCAP_PARM
+
+SYSTEM_CONFIG_DIR=$SYSTEM_CONFIG_DIR_8
+
+  GET_STDEV_LOG_DATA_SET_PCAP_PARM
+
+SYSTEM_CONFIG_DIR=$SYSTEM_CONFIG_DIR_9
+
+  GET_STDEV_LOG_DATA_SET_PCAP_PARM
+
+SYSTEM_CONFIG_DIR=$SYSTEM_CONFIG_DIR_10
+
+  GET_STDEV_LOG_DATA_SET_PCAP_PARM
+
+}
+
+### Final Log Gathering and Assmembly - Function 1 - This one sets the pcap directory paramerters ###
+
+function GET_STDEV_LOG_DATA_SET_PCAP_PARM {
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR1
+
+    GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR2
+
+    GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR3
+
+    GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR4
+
+    GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR5
+
+    GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR6
+
+    GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR7
+
+    GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR8
+
+    GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR9
+
+    GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR10
+
+    GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA
+
+  PCAP_SUB_DIR=$PCAP_SUB_DIR11
+
+}
+
+### Final Log Gathering and Assmembly - Function 2 - This one sets the test type directory paramerters ###
+
+function GET_STDEV_LOG_DATA_SET_PARMS_GET_DATA {
+
+    INDIVIDUAL_TESTS_LOG_DIRECTORY=$INDIVIDUAL_TESTS_LOG_DIRECTORY_ET_FREE_RULES
+
+      GET_STDEV_LOG_DATA_FOR_FINAL_CSV
+
+    INDIVIDUAL_TESTS_LOG_DIRECTORY=$INDIVIDUAL_TESTS_LOG_DIRECTORY_ET_PRO_RULES
+
+      GET_STDEV_LOG_DATA_FOR_FINAL_CSV
+
+    INDIVIDUAL_TESTS_LOG_DIRECTORY=$INDIVIDUAL_TESTS_LOG_DIRECTORY_NO_RULES
+
+      GET_STDEV_LOG_DATA_FOR_FINAL_CSV
+
+    INDIVIDUAL_TESTS_LOG_DIRECTORY=$INDIVIDUAL_TESTS_LOG_DIRECTORY_NO_RULES_SURICATA_OPTOMIZED
+
+      GET_STDEV_LOG_DATA_FOR_FINAL_CSV
+
+}
+
+### Final Log Gathering and Assmembly - Function 3 - This does the actual data gathering and file output ###
+
+function GET_STDEV_LOG_DATA_FOR_FINAL_CSV {
+rm -rf temp*.file
+
+echo $SYSTEM_CONFIG_DIR "," $PCAP_SUB_DIR "," $INDIVIDUAL_TESTS_LOG_DIRECTORY "," >> temp4.file
+
+cat $SYSTEM_CONFIG_DIR/$PCAP_SUB_DIR/$INDIVIDUAL_TESTS_LOG_DIRECTORY/std_run_log | sed '1d;/^[S]/d;/^$/d;s/^[ ]*//;s/[ ]\+/,/g' | cut -d= -f 3 | cut -d, -f 1 > temp1.file
+cat $SYSTEM_CONFIG_DIR/$PCAP_SUB_DIR/$INDIVIDUAL_TESTS_LOG_DIRECTORY/std_run_log | sed '1d;/^[S]/d;/^$/d;s/^[ ]*//;s/[ ]\+/,/g' | cut -d= -f 4 > temp2.file
+
+N=1
+loops=9
+
+until [ "$N" -eq $loops ]
+  do
+    S1=$N
+    ((S2=N+1))
+    N=$S2
+    echo "," >> temp3.file
+  done
+
+FILLTEMP=`paste temp1.file temp3.file temp2.file temp3.file`
+
+echo $FILLTEMP >> temp5.file
+
+paste temp4.file temp5.file > almost_done_temp.file
+
+}
+###################################
+
+Lables:
+
+Suricata PPS Average, Suricata PPS Stdev
+Snort PPS Average, Snort PPS Stdev
+Suricata Core Utilization Average, Suricata Core Utilization Stdev
+Snort Core Utilization Average, Snort Core Utilization Stdev
+Suricata Memory Usage (KB) Average, Suricata Memory Usage (KB) Stdev 
+Snort Memory Usage (KB) Average, Snort Memory Usage (KB) Stdev
+Suricata Run Time (Seconds) Average, Suricata Run Time (Seconds) Standard Deviations
+Snort Run Time (Seconds) Average, Snort Run Time (Seconds) Standard Deviations
+
+Final Spreadsheet Tests Column Lables:
+
+# OF CORES,CONFIGURATION,TEST PCAP,RULE CONFIGURATION,STATS PULLED FROM,
+1,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+1,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+1,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules_tweeked,std_run_log,
+1,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+1,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+1,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+1,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+1,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+1,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+1,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+1,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_free_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_pro_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules,std_run_log,
+1,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+2,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_free_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_pro_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules,std_run_log,
+2,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+3,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_free_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_pro_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules,std_run_log,
+3,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+4,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_free_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_pro_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules,std_run_log,
+4,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+5,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_free_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_pro_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules,std_run_log,
+5,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+6,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_free_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_pro_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules,std_run_log,
+6,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+8,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_free_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_pro_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules,std_run_log,
+8,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+12,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_free_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_pro_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules,std_run_log,
+12,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+18,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_free_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_pro_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules,std_run_log,
+18,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,ictf2010pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_allpcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t1pcap_based_run,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t2pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t3pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t4pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t5pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t6pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t7pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t8pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+24,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_free_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_et_pro_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules,std_run_log,
+24,cpu_48g-std-t1,pytbull_t9pcap_based_runs,test_output_no_rules_tweeked,std_run_log,
+
+
+Final Spreadsheet Headers:
+
+# OF CORES,CONFIGURATION,SYSTEM CONFIGURATION,TEST PCAP,RULE CONFIGURATION,STATS PULLED FROM,\
+Suricata PPS Average, Suricata PPS Stdev,\
+Snort PPS Average, Snort PPS Stdev,\
+Suricata Core Utilization Average, Suricata Core Utilization Stdev,\
+Snort Core Utilization Average, Snort Core Utilization Stdev,\
+Suricata Memory Usage (KB) Average, Suricata Memory Usage (KB) Stdev,\ 
+Snort Memory Usage (KB) Average, Snort Memory Usage (KB) Stdev,\
+Suricata Run Time (Seconds) Average, Suricata Run Time (Seconds) Standard Deviations,\
+Snort Run Time (Seconds) Average, Snort Run Time (Seconds) Standard Deviations,
+
+Final Spreadsheet Tests Column Lables:
+
+CORE CONFIGURATION,TEST PCAP,RULE CONFIGURATION,STATS PULLED FROM,

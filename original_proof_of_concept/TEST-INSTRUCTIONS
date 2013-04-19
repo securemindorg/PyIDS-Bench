@@ -1,0 +1,67 @@
+### This is not a script ###
+### Steps to gather stats data on snort and suricata ###
+### Using ps with sleep commands instead of pidstat as per James suggestion ###
+### whitejs@clarkson.edu ###
+
+# 0.) Clean up all the log files
+
+echo " " > /var/log/suricata/stats.log && echo " " > /var/log/snort/snort.stats
+
+# 1.) Run the following commands as a script to get the cpu, memory, date and print them to a date file and a usage file (out.1 out.2)
+
+---
+#!/bin/bash
+touch out.1 out.2 && for (( i=1;i<=15;i+=1 )) ; do ps eufp $(pidof Xorg) >> out.2; sleep 1; done & 
+(insert suricata / snort usage here)
+---
+
+# 1.1) For the previous command, the suricata and snort usage's are:
+
+suricata -c /etc/suricata/suricata.yaml -r (pcap file)
+
+snort -c /etc/snort/snort.conf -r (pcap file)
+
+# 2.) format out.2 by getting rid of the repeated header line, removing spaces, and adding "," between each field
+
+touch out.3 && cat out.2 | sed '1d;/^[%CPU]/d;/^$/d;s/^[ ]*//;s/[ ]\+/,/g' | cut -d, -f 1,2,3,4,5,6,7,8,9,10,11 >> out.3
+
+# 4.) make headers for final file
+
+touch process-suricata-stats.csv && echo "User,PID,%CPU,%MEM,VSZ,RSS,TTY,STAT,START,PID Time,Command" >> process-suricata-stats.csv
+or
+touch process-snort-stats.csv && echo "User,PID,%CPU,%MEM,VSZ,RSS,TTY,STAT,START,PID Time,Command" >> process-snort-stats.csv
+
+# 5.) paste the output files together (name it for Suricata or Snort)
+
+cat out.3 | sed 's/\t/,/g' >> process-suricata-stats.csv
+or
+cat out.3 | sed 's/\t/,/g' >> process-snort-stats.csv
+
+# 6.) grab the stat files 
+
+# 6.1) for suricata (/var/log/suricata/stats.log) clean up with the following:
+
+cat /var/log/suricata/stats.log | grep "Date" | cut -c 21-28 > temp1.file
+cat /var/log/suricata/stats.log | grep "decoder.ipv4" | cut -c 57-100 > temp2.file
+echo "time,packet count" > suricata-stats.csv
+paste temp1.file temp2.file | sed 's/\t/,/g' >> suricata-stats.csv
+
+somtimes suricata will output multiple instances of the same line in the stats file, I havn't figured out why yet, just go by the timestamp and take the highest packet count per second
+
+# 6.2) for snort (/var/log/snort.stats) clean up with the following:
+
+echo "time, kilo-pps" > snort-stats.csv
+cut -d, -f 1,5 /var/log/snort/snort.stats | sed '1d;/^[#]/d;/^$/d;s/^[ ]*//;s/[ ]\+/,/g' >> snort-stats.csv
+
+# 7.) quick calculations in spreadsheet (Excel, OO, Google Docs) 
+
+for suricata-stats.csv take the packet count each second and subtract it from the next. This gives you packets per second, "you'll need to make a new column"
+
+for both suricata and snort you'll need to match up the process-(suricata/snort)-stats.csv's with the (suricarta/snort)-stats.csv's based on time stamps line by line. I could probably write another one-liner but doing it by hand is just as easy
+
+for snort: http://trojanedbinaries.com/blog/?p=24 and second 2.2.5 of http://manual.snort.org/node16.html gives the break down of feilds 
+
+# 8.) cleanup
+
+rm -f out*
+rm -f temp1.file temp2.file

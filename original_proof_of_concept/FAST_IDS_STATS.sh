@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# James -
+#
+# This script needs some work, it uses ps to grab stats of the running service (snort or suricata) 
+# the current problem is that you have to set the timer to some number of seconds in this case 30 seconds
+# (i<=30). This means that ps will loop for 30 seconds and then stop counting, this is a good and bad thing.
+# it gives you an exact measurement of time but sometimes snort or suricata will take longer then that time.
+# 
+# What we need is a loop that verifies that the process is running and then quits if it doesn't. I have something 
+# simular in the older script that used pidstat (IDS-PIDSTAT-Auto-Grapher-v6.sh) 
+# 
+# Please take a look and see if you can clean this up a bit and verify that it's doing what it's supposed to.
+#
+# Thanks, Josh
+#
+
+# Define your pcap file location here:
+PCAP_FILE = "/root/pcapfile_name.pcap"
+
+# Clean Everything
+echo " " > /var/log/suricata/stats.log && echo " " > /var/log/snort/snort.stats
+
+# get ps stats loop (suricata)
+touch out.2 && for (( i=1;i<=30;i+=1 )) ; do ps eufp $(pidof suricata) >> out.2; sleep 1; done & 
+
+# start suricata
+suricata -c /etc/suricata/suricata.yaml -r $PCAP_FILE
+
+# turn out.2 (the ps stats file) into a csv
+touch out.3 && cat out.2 | sed '1d;/^[%CPU]/d;/^$/d;s/^[ ]*//;s/[ ]\+/,/g' | cut -d, -f 1,2,3,4,5,6,7,8,9,10,11 >> out.3
+
+# create the final suricata process stats file
+touch process-suricata-stats.csv && echo "User,PID,%CPU,%MEM,VSZ,RSS,TTY,STAT,START,PID Time,Command" >> process-suricata-stats.csv
+cat out.3 | sed 's/\t/,/g' >> process-suricata-stats.csv
+
+# get and process suricata's own stats file
+cat /var/log/suricata/stats.log | grep "Date" | cut -c 21-28 > temp1.file
+cat /var/log/suricata/stats.log | grep "decoder.ipv4" | cut -c 57-100 > temp2.file
+echo "time,packet count" > suricata-stats.csv
+paste temp1.file temp2.file | sed 's/\t/,/g' >> suricata-stats.csv
+
+# clean up and get ready to start over with snort
+rm out.2 out.3
+
+# get ps stats loop (snort)
+touch out.2 && for (( i=1;i<=30;i+=1 )) ; do ps eufp $(pidof ssnort) >> out.2; sleep 1; done &
+
+# start snort
+snort -c /etc/snort/snort.conf -r $PCAP_FILE
+
+# turn out.2 (the ps stats file) into a csv
+touch out.3 && cat out.2 | sed '1d;/^[%CPU]/d;/^$/d;s/^[ ]*//;s/[ ]\+/,/g' | cut -d, -f 1,2,3,4,5,6,7,8,9,10,11 >> out.3
+
+# create the final snort process stats file
+touch process-snort-stats.csv && echo "User,PID,%CPU,%MEM,VSZ,RSS,TTY,STAT,START,PID Time,Command" >> process-suricata-stats.csv
+cat out.3 | sed 's/\t/,/g' >> process-snort-stats.csv
+
+# get and process snort's own stats file
+echo "time, kilo-pps" > snort-stats.csv
+cut -d, -f 1,5 /var/log/snort/snort.stats | sed '1d;/^[#]/d;/^$/d;s/^[ ]*//;s/[ ]\+/,/g' >> snort-stats.csv
+
+# clean up and get read to start over
+rm out.2 out.3
