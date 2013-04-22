@@ -8,10 +8,14 @@ Created on Sat Nov 10 23:14:52 2012
 These are unit test support functions
 
 TODO -
-	All of these need to be properly built out
+        All of these need to be properly built out
 """
+import sys
+sys.path.append(".")
 
+import PyIDSBenchFunc
 import unittest
+
 
 class TestFunctions(unittest.TestCase):
 
@@ -24,15 +28,17 @@ class TestFunctions(unittest.TestCase):
     def test_MinMaxMeanTests(self):
         print "Running: Min Max Mean Tests"
         print "test 1"
-        self.assertTrue(True)
-        ''' UnitTesting '''
+
+        result1 = PyIDSBenchFunc.MinMaxMean([1, 1, 1, 1, 1])
+
+        self.assertTrue(result1 == (1, 1, 1))
 
     def test_StandardDeviationTests(self):
         print "Running: Standard Deviation Tests"
         print "test 1"
         self.assertTrue(True)
         ''' UnitTesting '''
-        
+
     def test_RunAllBenchmarksTests(self):
         print "Running: Run All Benchmarks Tests"
         print "test 1"
@@ -58,27 +64,27 @@ class TestFunctions(unittest.TestCase):
         ''' UnitTesting '''
 
     def test_CreateGraphsTests(self):
-        print "Running: Create Graphs Tests"   
-        print "test 1"     
-        self.assertTrue(True)    
-        ''' UnitTesting '''       
-        
+        print "Running: Create Graphs Tests"
+        print "test 1"
+        self.assertTrue(True)
+        ''' UnitTesting '''
+
     def test_CreateHTMLPageTests(self):
-        print "Running: Create HTML Tests"       
-        print "test 1" 
-        self.assertTrue(True)        
-        ''' UnitTesting '''        
-        
+        print "Running: Create HTML Tests"
+        print "test 1"
+        self.assertTrue(True)
+        ''' UnitTesting '''
+
     def test_RunWebServerTests(self):
-        print "Running: Run Web Server Tests"   
-        print "test 1"     
-        self.assertTrue(True)        
-        ''' UnitTesting '''         
-        
+        print "Running: Run Web Server Tests"
+        print "test 1"
+        self.assertTrue(True)
+        ''' UnitTesting '''
+
     def test_MainMenuOptionsTests(self):
         print "Running: Main Menu Options Tests"
         print "test 1"
-        self.assertTrue(True) 
+        self.assertTrue(True)
         ''' UnitTesting '''
-            
+
 unittest.main()

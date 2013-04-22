@@ -330,9 +330,14 @@ def InstallBro():
 
 
 def MinMaxMean(ResultsArray):
-
     ''' This function gets the min max and mean of a series of numbers '''
-    # TODO
+
+    Max = max(ResultsArray)
+    Min = min(ResultsArray)
+
+    floatNums = [float(x) for x in ResultsArray]
+    Mean = sum(floatNums) / len(ResultsArray)
+
     return Min, Max, Mean
 
 ###############################################################################
