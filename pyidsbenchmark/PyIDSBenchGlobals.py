@@ -4,7 +4,6 @@ Created on Sat Nov 10 23:14:52 2012
 
 @author: - Joshua White
          - whitejs@clarkson.edu
-         
 """
 
 VERSION = "1.0.0"
