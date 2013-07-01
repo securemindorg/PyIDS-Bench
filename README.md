@@ -11,18 +11,19 @@ Up to date versions of this utility are maintained by XXXXXX and
 can be found at XXXXXXX 
 
 ## Build Requirements ##
-python
-python-dev
+- python
+- python-dev
 
 ## Library Requirements ##
 All libraries can be installed through pip or easy_install
 
-psutil
-datetime
-matplotlib
-multiprocessing
-netifaces
-os
+
+- datetime
+- matplotlib
+- multiprocessing
+- netifaces
+- os
+- psutil
 
 ## Installation Process ##
 
