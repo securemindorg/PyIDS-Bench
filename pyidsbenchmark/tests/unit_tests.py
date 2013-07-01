@@ -87,4 +87,5 @@ class TestFunctions(unittest.TestCase):
         self.assertTrue(True)
         ''' UnitTesting '''
 
-unittest.main()
+if __name__ == "__main__":
+    unittest.main()
