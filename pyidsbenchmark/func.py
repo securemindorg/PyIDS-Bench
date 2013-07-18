@@ -6,7 +6,7 @@ Created on Sat Nov 10 23:14:52 2012
          - whitejs@clarkson.edu
 """
 
-from PyIDSBenchGlobals import *
+from globals import *
 import multiprocessing
 import datetime
 import os

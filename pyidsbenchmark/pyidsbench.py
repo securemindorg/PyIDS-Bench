@@ -15,12 +15,12 @@ Created on Sat Nov 10 23:14:52 2012
             This function in turn will call the MaxMean() function as needed
 '''
 
-from PyIDSBenchFunc import ScriptUsage, PrintVersion, WhatIDSArePresent
-from PyIDSBenchFunc import GetDateTime, CreateGraphs, ProcessMonitor
-from PyIDSBenchFunc import InstallSuricata, InstallBro, InstallSnort
-from PyIDSBenchFunc import SuricataTests, SnortTests, SysLogging
-from PyIDSBenchFunc import SuricataStatsLogParser, SnortStatsLogParser
-from PyIDSBenchGlobals import *
+from func import ScriptUsage, PrintVersion, WhatIDSArePresent
+from func import GetDateTime, CreateGraphs, ProcessMonitor
+from func import InstallSuricata, InstallBro, InstallSnort
+from func import SuricataTests, SnortTests, SysLogging
+from func import SuricataStatsLogParser, SnortStatsLogParser
+from globals import *
 import sys
 import getopt
 import subprocess
